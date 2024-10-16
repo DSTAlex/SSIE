@@ -1,0 +1,16 @@
+curl -X POST -H 'X-M2M-Origin:Cmysensor' -H 'X-M2M-RI:123' -H 'X-M2M-RVI:3' -H 'Content-Type:application/json;ty=2' -H 'Accept:application/json' -d '{"m2m:ae": {"rn":"MySensor", "api": "NMysensor", "rr": true, "srv": ["3"]}}' http://localhost:8080/cse-in
+
+
+curl -X POST -H 'X-M2M-Origin:Cmysensor' -H 'X-M2M-RI:123' -H 'X-M2M-RVI:3' -H 'Content-Type:application/json;ty=3' -H 'Accept:application/json' -d '{"m2m:cnt": {"rn":"Container"}}' http://localhost:8080/cse-in/MySensor
+
+curl -X POST -H 'X-M2M-Origin:Cmysensor' -H 'X-M2M-RI:123' -H 'X-M2M-RVI:3' -H 'Content-Type:application/json;ty=4' -H 'Accept:application/json' -d '{"m2m:cin": {"cnf": "text/plain:0", "con": "{\"unit\": \"celsius\", \"value\": \"22\"}"}}' http://localhost:8080/cse-in/MySensor/Container
+
+curl -X GET -H 'X-M2M-Origin:Cmysensor' -H 'X-M2M-RI:123' -H 'X-M2M-RVI:3' -H 'Content-Type:application/json' -H 'Accept:application/json' http://localhost:8080/cse-in/MySensor/Container/la
+
+curl -X PUT -H 'X-M2M-Origin:Cmysensor' -H 'X-M2M-RI:123' -H 'X-M2M-RVI:3' -H 'Content-Type:application/json' -H 'Accept:application/json' -d '{"m2m:cnt": {"mni": 10}}' http://localhost:8080/cse-in/MySensor/Container
+
+curl -X DELETE -H 'X-M2M-Origin:Cmysensor' -H 'X-M2M-RI:123' -H 'X-M2M-RVI:3' -H 'Content-Type:application/json' -H 'Accept:application/json' http://localhost:8080/cse-in/MySensor/Container
+
+
+curl -X POST -H 'X-M2M-Origin:Cmysensor' -H 'X-M2M-RI:123' -H 'X-M2M-RVI:3' -H 'Content-Type:application/json;ty=4' -H 'Accept:application/json' -d '{"m2m:cin": {"rn":"CINwithLabel", "lbl": ["tag:temperature"], "cnf": "text/plain:0", "con": "{\"unit\": \"celsius\","value\": \"22\"}"}}' http://localhost:8080/cse-in/MySensor/Container
+

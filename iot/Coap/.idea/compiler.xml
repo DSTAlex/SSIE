@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cf-browser" />
+        <module name="cf-server" />
+        <module name="cf-jmeter-plugin" />
+        <module name="cf-polyfill" />
+        <module name="cf-rd" />
+        <module name="cf-client" />
+        <module name="cf-coapbench" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cf-browser" options="-Xlint:deprecation" />
+      <module name="cf-client" options="-Xlint:deprecation" />
+      <module name="cf-coapbench" options="-Xlint:deprecation" />
+      <module name="cf-jmeter-plugin" options="-Xlint:deprecation" />
+      <module name="cf-polyfill" options="-Xlint:deprecation" />
+      <module name="cf-rd" options="-Xlint:deprecation" />
+      <module name="cf-server" options="-Xlint:deprecation" />
+    </option>
+  </component>
+</project>

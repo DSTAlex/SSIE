@@ -1,0 +1,1 @@
+curl -H "Content-Type: application/json" -X GET http://163.5.23.73:8083/LED/all
