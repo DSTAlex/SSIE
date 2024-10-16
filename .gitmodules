@@ -25,3 +25,6 @@
 [submodule "twifeur/2025-epitweet-la-ruche-ssie"]
 	path = twifeur/2025-epitweet-la-ruche-ssie
 	url = git@gitlab.cri.epita.fr:ing/majeures/tc/info/student/2025/2025-epitweet-la-ruche-ssie.git
+[submodule "nuage/cloud-tp-2"]
+	path = nuage/cloud-tp-2
+	url = git@gitlab.cri.epita.fr:luna.zozor/cloud-tp-2.git
