@@ -16,3 +16,9 @@
 [submodule "pfe"]
 	path = pfe
 	url = git@gitlab.cri.epita.fr:matthieu.jolimaitre/pfe.git
+[submodule "robot/ssie-robot-simulator-tp1"]
+	path = robot/ssie-robot-simulator-tp1
+	url = git@gitlab.cri.epita.fr:alexandre.di-santo/ssie-robot-simulator-tp1.git
+[submodule "robot/ssie-robot-command"]
+	path = robot/ssie-robot-command
+	url = git@gitlab.cri.epita.fr:alexandre.di-santo/ssie-robot-command.git
