@@ -1,3 +1,6 @@
 [submodule "GPU"]
 	path = GPU
 	url = git@github.com:DSTAlex/GPU.git
+[submodule "init_docker/epita-ing-major-docker-2025-alexandre.di-santo"]
+	path = init_docker/epita-ing-major-docker-2025-alexandre.di-santo
+	url = alexandre.di-santo@git.forge.epita.fr:p/epita-ing-major/docker-2025/epita-ing-major-docker-2025-alexandre.di-santo.git
