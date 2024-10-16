@@ -13,3 +13,6 @@
 [submodule "nosql/epita-ing-major-deploy-2025-alexandre.di-santo"]
 	path = nosql/epita-ing-major-deploy-2025-alexandre.di-santo
 	url = alexandre.di-santo@git.forge.epita.fr:p/epita-ing-major/deploy-2025/epita-ing-major-deploy-2025-alexandre.di-santo.git
+[submodule "pfe"]
+	path = pfe
+	url = git@gitlab.cri.epita.fr:matthieu.jolimaitre/pfe.git
