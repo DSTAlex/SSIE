@@ -28,3 +28,6 @@
 [submodule "nuage/cloud-tp-2"]
 	path = nuage/cloud-tp-2
 	url = git@gitlab.cri.epita.fr:luna.zozor/cloud-tp-2.git
+[submodule "nuage/cloud-tp-1"]
+	path = nuage/cloud-tp-1
+	url = git@gitlab.cri.epita.fr:alexandre.di-santo/ssie_cloud_project_template.git
