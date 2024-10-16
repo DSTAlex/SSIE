@@ -1,0 +1,3 @@
+[submodule "GPU"]
+	path = GPU
+	url = git@github.com:DSTAlex/GPU.git
