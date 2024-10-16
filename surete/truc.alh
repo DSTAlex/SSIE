@@ -1,0 +1,42 @@
+sig process {
+  var r : one Int,
+  var crit : one Int
+}
+
+sig T {
+	var t: one process
+}
+
+pred Init[p:process] {
+  	p.r = 0
+	p.crit = 0
+}
+
+pred demande[p:process] { 
+  	p.r' = 1 
+	p.crit' = p.crit
+	T.t' in process - p
+}
+
+pred acces[p:process] {
+	T.t = p or T.t.r = 0 and p.crit' = 1
+}
+
+pred exit[p:process] {
+  p.crit = 1 and p.crit' = 0 and p.r' = 0
+}
+
+pred skip[p:process] {
+	p.r' = p.r
+	p.crit' = p.crit
+}
+
+fact Init {all i: process | Init[i]}
+
+fact next { always {some i: process|
+  (acces[i] or exit[i] or demande[i]) and
+  all j: process - i | skip[j]
+}}
+
+
+//run test { next } for 2 process

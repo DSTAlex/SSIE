@@ -22,3 +22,6 @@
 [submodule "robot/ssie-robot-command"]
 	path = robot/ssie-robot-command
 	url = git@gitlab.cri.epita.fr:alexandre.di-santo/ssie-robot-command.git
+[submodule "twifeur/2025-epitweet-la-ruche-ssie"]
+	path = twifeur/2025-epitweet-la-ruche-ssie
+	url = git@gitlab.cri.epita.fr:ing/majeures/tc/info/student/2025/2025-epitweet-la-ruche-ssie.git
