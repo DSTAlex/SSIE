@@ -4,3 +4,12 @@
 [submodule "init_docker/epita-ing-major-docker-2025-alexandre.di-santo"]
 	path = init_docker/epita-ing-major-docker-2025-alexandre.di-santo
 	url = alexandre.di-santo@git.forge.epita.fr:p/epita-ing-major/docker-2025/epita-ing-major-docker-2025-alexandre.di-santo.git
+[submodule "nosql/epita-ing-major-nosql-2025-alexandre.di-santo"]
+	path = nosql/epita-ing-major-nosql-2025-alexandre.di-santo
+	url = alexandre.di-santo@git.forge.epita.fr:p/epita-ing-major/nosql-2025/epita-ing-major-nosql-2025-alexandre.di-santo.git
+[submodule "nosql/epita-ing-major-scale-2025-alexandre.di-santo"]
+	path = nosql/epita-ing-major-scale-2025-alexandre.di-santo
+	url = alexandre.di-santo@git.forge.epita.fr:p/epita-ing-major/scale-2025/epita-ing-major-scale-2025-alexandre.di-santo.git
+[submodule "nosql/epita-ing-major-deploy-2025-alexandre.di-santo"]
+	path = nosql/epita-ing-major-deploy-2025-alexandre.di-santo
+	url = alexandre.di-santo@git.forge.epita.fr:p/epita-ing-major/deploy-2025/epita-ing-major-deploy-2025-alexandre.di-santo.git
