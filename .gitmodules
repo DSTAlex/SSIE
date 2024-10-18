@@ -30,10 +30,13 @@
 	url = git@gitlab.cri.epita.fr:luna.zozor/cloud-tp-2.git
 [submodule "nuage/cloud-tp-1"]
 	path = nuage/cloud-tp-1
-	url = git@gitlab.cri.epita.fr:alexandre.di-santo/ssie_cloud_project_template.git
+	url = git@gitlab.cri.epita.fr:alexandre.di-santo/ssie_cloud_project_template_step1.git
 [submodule "nuage/cloud-tp-4"]
 	path = nuage/cloud-tp-4
 	url = git@gitlab.cri.epita.fr:matthieu.jolimaitre/ssie_cloud_project_template.git
 [submodule "nuage/cloud-tp-3"]
 	path = nuage/cloud-tp-3
 	url = git@gitlab.cri.epita.fr:valentin.giaufer/ssie_cloud_project_template.git
+[submodule "nuage/cloud-tp-5"]
+	path = nuage/cloud-tp-5
+	url = git@gitlab.cri.epita.fr:clement.thollet/cloud-tp-5.git
