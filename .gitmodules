@@ -13,9 +13,6 @@
 [submodule "nosql/epita-ing-major-deploy-2025-alexandre.di-santo"]
 	path = nosql/epita-ing-major-deploy-2025-alexandre.di-santo
 	url = alexandre.di-santo@git.forge.epita.fr:p/epita-ing-major/deploy-2025/epita-ing-major-deploy-2025-alexandre.di-santo.git
-[submodule "pfe"]
-	path = pfe
-	url = git@gitlab.cri.epita.fr:matthieu.jolimaitre/pfe.git
 [submodule "robot/ssie-robot-simulator-tp1"]
 	path = robot/ssie-robot-simulator-tp1
 	url = git@gitlab.cri.epita.fr:alexandre.di-santo/ssie-robot-simulator-tp1.git
@@ -40,3 +37,6 @@
 [submodule "nuage/cloud-tp-5"]
 	path = nuage/cloud-tp-5
 	url = git@gitlab.cri.epita.fr:clement.thollet/cloud-tp-5.git
+[submodule "pfe"]
+	path = pfe
+	url = git@github.com:ssie2025-pfe2/hll2smt-py.git
