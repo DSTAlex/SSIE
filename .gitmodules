@@ -37,6 +37,3 @@
 [submodule "nuage/cloud-tp-5"]
 	path = nuage/cloud-tp-5
 	url = git@gitlab.cri.epita.fr:clement.thollet/cloud-tp-5.git
-[submodule "pfe"]
-	path = pfe
-	url = git@github.com:ssie2025-pfe2/hll2smt-py.git
