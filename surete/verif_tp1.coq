@@ -139,3 +139,179 @@ Proof.
   apply H0.
 Qed.
 
+Proposition plus_n_0 :
+forall n: nat, n+0=n.
+
+Proof.
+  intros.
+  
+  induction n.
+    simpl.
+    reflexivity.
+    simpl.
+    rewrite IHn.
+    reflexivity.
+Qed.
+
+Proposition double_is_plus:
+forall n : nat, n+n=2*n.
+
+Proof.
+  intros.
+  induction n.
+  simpl.
+  reflexivity.
+  simpl.
+  rewrite plus_n_0.
+  reflexivity.
+Qed.
+
+Fixpoint fact (n:nat) : nat :=
+match n with
+| 0 => 1
+| S n' => n * fact n' end.
+
+
+Fixpoint even (n:nat) : Prop :=
+match n with
+| 0 => True
+| S 0 => False
+| S (S k) => even k 
+end.
+
+
+
+
+Proposition add_succ_l :
+forall n m: nat, S n + m = S (n + m).
+
+Proof.
+  intros.
+  simpl.
+  reflexivity.
+Qed.
+
+Proposition add_succ_r :
+forall n m: nat, n + S m = S (n + m).
+
+Proof.
+  intros.
+  induction n.
+  simpl.
+  reflexivity.
+  simpl.
+  rewrite IHn.
+  reflexivity.
+Qed.
+
+Proposition one_of_two_succ_is_even:
+forall n : nat, (even n) \/ (even (S n)).
+
+Proof.
+  intros.
+  induction n.
+  left.
+  simpl.
+  reflexivity.
+  destruct IHn.
+  simpl.
+  right.
+  apply H.
+  left.
+  apply H.  
+Qed.
+
+Proposition but_not_both :
+forall n : nat, even n -> ~ (even (S n)).
+
+Proof.
+    intros.
+    induction n.
+    simpl.
+    intro.
+    apply H0.
+    
+    simpl.
+    intro.
+    apply IHn.
+    apply H0.
+    apply H.
+Qed.
+
+
+
+Proposition double_is_even :
+forall n : nat, even (n*2).
+
+Proof.
+  intros.
+  induction n.
+  simpl.
+  reflexivity.
+  simpl.
+  apply IHn.
+Qed.
+
+
+
+Proposition succ_double_is_odd :
+forall n : nat, ~(even (S (n*2))).
+
+Proof.
+  intros.
+  apply but_not_both.
+  apply double_is_even.
+Qed.
+
+
+Proposition pair_induction :
+forall (P : nat -> Prop),
+P 0 -> P 1 -> (forall n, P n -> P (S n) -> P (S (S n))) ->
+forall x, P x.
+
+Proof.
+  intros.
+  assert ((P x) /\ (P (S x))).
+  induction x.
+  split.
+  apply H.
+  apply H0.
+  destruct IHx.
+  split.
+  apply H3.
+  apply H1.
+  apply H2.
+  apply H3.
+  destruct H2.
+  apply H2.  
+Qed.
+
+
+
+
+
+Proposition even_sum :
+forall n m : nat, even (n) /\ even (m) -> even ( n + m ).
+
+Proof.
+  intros.  
+  induction m using pair_induction.
+  rewrite plus_n_0.
+  destruct H.
+  apply H.
+  destruct H.
+  rewrite add_succ_r.
+  rewrite plus_n_0.
+  simpl in H0.
+  contradiction.
+  
+  rewrite add_succ_r.
+  rewrite add_succ_r.
+  simpl.
+  apply IHm.
+  simpl in H.
+  apply H.
+Qed.
+
+
+
