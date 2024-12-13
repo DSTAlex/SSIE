@@ -10,12 +10,22 @@ docker run -itd -p 8040:8042 --net=$network --name hadoop-worker1 --hostname had
 docker run -itd -p 8041:8042 --net=$network --name hadoop-worker2 --hostname hadoop-worker2 liliasfaxi/hadoop-cluster:latest 
 
 echo copy files
-docker cp reducer_dracula.py hadoop-master:/root/
-docker cp mapper_dracula.py hadoop-master:/root/
 docker cp exo_dracula.sh hadoop-master:/root/
+docker cp dracula/ hadoop-master:/root/
+docker cp exo_total_vente_magasin.sh hadoop-master:/root/
+docker cp total_vente_magasin hadoop-master:/root/
+docker cp exo_total_vente_categorie.sh hadoop-master:/root/
+docker cp total_vente_categorie hadoop-master:/root/
+docker cp exo_total_vente_categorie_exclude.sh hadoop-master:/root/
+docker cp total_vente_categorie_exclude hadoop-master:/root/
+docker cp exo_paiement.sh hadoop-master:/root/
+docker cp paiement hadoop-master:/root/
+docker cp exo_total_vente.sh hadoop-master:/root/
+docker cp total_vente hadoop-master:/root/
 
 
 
 
-echo -e "\n\ndo ./start-haddop.sh\n"
+
+echo -e "\n\ndo ./start-hadoop.sh\n"
 docker exec -it hadoop-master bash
