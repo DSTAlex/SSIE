@@ -40,3 +40,9 @@
 [submodule "PFE"]
 	path = pfe
 	url = git@github.com:ssie2025-pfe2/hll2smt-py.git
+[submodule "robot/ssie-robot-embedded"]
+	path = robot/ssie-robot-embedded
+	url = git@gitlab.cri.epita.fr:julia.royer/ssie-robot-embedded.git
+[submodule "hardware/reveilhard"]
+	path = hardware/reveilhard
+	url = git@gitlab.cri.epita.fr:valentin.giaufer/reveilhard.git
