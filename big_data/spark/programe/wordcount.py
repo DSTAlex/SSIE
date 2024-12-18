@@ -11,7 +11,7 @@ counts = lines.flatMap(lambda x: x.split(' ')) \
     .map(lambda x : (x, 1)) \
     .reduceByKey(lambda v1, v2 : v1+v2)
 
-.saveAsTextFile('sortie')counts
+counts.saveAsTextFile('sortie')
 #Pour afficher sur la console le résultat
 #output = counts.collect()
 #for (word, count) in output :
