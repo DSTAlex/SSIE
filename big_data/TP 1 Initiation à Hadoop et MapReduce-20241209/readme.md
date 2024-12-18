@@ -1,4 +1,4 @@
-run ./start_docker.sh for create all dockers, copy files in it and open a terminal in hadoop-master
+run ./start_docker.sh for create all dockers, copy files in it, start the hadoop server and open a terminal in hadoop-master
 
 run ./end_docker.sh to deleate all docker
 

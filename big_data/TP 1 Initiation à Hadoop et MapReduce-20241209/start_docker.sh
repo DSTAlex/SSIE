@@ -24,8 +24,8 @@ docker cp exo_total_vente.sh hadoop-master:/root/
 docker cp total_vente hadoop-master:/root/
 
 
+echo run ./start-hadoop
+docker exec hadoop-master ./start-hadoop.sh
 
-
-
-echo -e "\n\ndo ./start-hadoop.sh\n"
 docker exec -it hadoop-master bash
+

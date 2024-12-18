@@ -50,12 +50,12 @@ in hadoop-master
     run ./exo_stream.sh to do the exercice to get all espece and genre of trees
     see the result in the terminal of hadoop-master
     you can out yours in the terminal named nc -lk 9999
-    the programe take time to set up and it is not very reactive, let it time
-
-    exemple of output of exo_stream.sh:  
-        ![alt text](output_wc_stream.png)
+    the programe take time to set up and it is not very reactive, let it time  
 
 ```
+exemple of output of exo_stream.sh:
+![image](output_wc_stream.png)
+
 
 j'ai eu des problèmes avec wc_stream.py car Dstream est déprécié  
 j'ai donc recodé un programe avec SparkSession  
