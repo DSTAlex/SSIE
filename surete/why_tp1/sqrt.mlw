@@ -1,0 +1,23 @@
+module Sqrt
+
+  use int.Int
+  use int.ComputerDivision
+  let function (/) = div
+  
+  axiom sqrt_fix_point : forall i j:int. i < (j+1)*(j+1) -> i < ((i/j + j)/2 +1)*((i/j + j)/2 +1)
+
+let sqrt (x : int)
+  requires { x >= 0 }
+  ensures { result * result <= x && (result+1) * (result+1) > x}
+  =
+    if x = 0 then 0 else
+    if x <= 3 then 1 else	
+      let ref y = x in let ref z = (x+1) / 2 in
+	while z < y do 
+	  invariant { z > 0 && x < (z+1) * (z+1) }
+	      variant { y } 
+	  y <- z;
+	  z <- (x/z + z)/2;
+	done;
+	y
+    end	

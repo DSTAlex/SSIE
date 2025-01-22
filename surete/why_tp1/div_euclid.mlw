@@ -1,0 +1,18 @@
+module Division
+
+  use int.Int
+
+  let division (a b: int) : int
+    requires { a >=0 /\ b > 0}
+    ensures  { exists r: int. a = b * result + r /\ 0 <= r < b }
+  =
+    let ref q = 0 in
+    let ref r = a in 
+    while r >= b do
+      variant { r }
+      invariant { a = b * q + r && 0 <= r}
+      q <- q + 1;
+      r <- r - b
+    done;
+    q
+end

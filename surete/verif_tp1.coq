@@ -313,5 +313,133 @@ Proof.
   apply H.
 Qed.
 
+Require Import List.
+Import ListNotations.
+
+
+Proposition concat_nil_left:
+forall (A:Set) (l: list A), (nil++l) = l.
+
+Proof.
+  intros.
+  simpl.
+  reflexivity.
+Qed.
+
+Proposition concat_nil_right:
+forall (A:Set) (l: list A), (l++nil) = l.
+
+Proof.
+  intros.
+  induction l.
+  -simpl.
+    reflexivity.
+  - simpl.
+    rewrite IHl.
+    reflexivity.
+Qed.
+
+
+Proposition concat_assocoatif:
+forall (A:Set) (l1 l2 l3:list A), ((l1++l2)++l3) = (l1++(l2++l3)).
+
+Proof.
+   intros.
+   induction l1.
+   - simpl.
+     reflexivity.
+   - simpl.
+     rewrite IHl1.
+     reflexivity.
+Qed.
+
+
+
+Fixpoint length {A: Set} (l: list A) : nat :=
+  match l with
+  | [] => 0
+  | a :: l1 =>  S (length l1)
+  end.
+  
+Proposition concat_length_sum : 
+forall (A:Set) (xs ys: list A), length(xs ++ ys) = length xs + length ys.
+
+Proof.
+  intros.
+  induction xs.
+  - simpl.
+    reflexivity.
+  - simpl.
+    rewrite IHxs.
+    reflexivity.
+   
+Qed.
+
+
+Fixpoint rev {A: Set} (l: list A) : list A :=
+  match l with
+  | [] => []
+  | a :: l1 =>  ((rev l1) ++ (a::[]))
+  end.
+  
+Proposition rev_length : 
+forall (A:Set) (l: list A), length l = length (rev l).
+
+Proof.
+  intros.
+  induction l.
+  - simpl.
+    reflexivity.
+  - simpl. 
+    rewrite IHl.
+    rewrite concat_length_sum.
+    simpl.
+    Search (_ +1).
+    rewrite PeanoNat.Nat.add_1_r .
+    reflexivity.
+Qed.
+
+
+Fixpoint nth {A:Set} (i:nat) (xs:(list A)) : (option A) :=
+  match xs, i with
+  | [], i => None
+  | b::l , 0 => Some b
+  | a::l, S x => nth x l
+  end.
+  
+  
+
+Proposition nth_len_app1 :
+forall (A:Set) (l1 l2 : list A), nth (length l1) (l1 ++ l2) = nth 0 l2.
+
+Proof.
+  intros.
+  induction l1.
+  - simpl length.
+    simpl.
+    reflexivity.
+  - simpl length.
+    simpl nth.
+    rewrite IHl1.
+    reflexivity.
+Qed.
+
+Proposition nth_len_app2 :
+forall (A:Set) (l1 l2: list A) (i: nat), (i < length l1) -> nth i (l1 ++ l2) = nth i l1.
+
+Proof.
+  intros.
+  induction l1.
+  - simpl length in H.
+    Search (_ < 0) .
+    apply PeanoNat.Nat.nlt_0_r in H.
+    contradiction.
+  - simpl.
+    simpl length in H.
+    case_eq (i <? 1).
+      
+Qed.
+
+
 
 

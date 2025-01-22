@@ -1,0 +1,34 @@
+module BubbleSort
+
+ use import int.Int
+  use import ref.Ref
+  use import array.Array
+  use import array.IntArraySorted
+  use import array.ArrayPermut
+  use import array.ArrayEq
+
+  let swap (a: array int) (i: int) (j: int) =
+    requires { 0 <= i < length a /\ 0 <= j < length a }
+    ensures { exchange (old a) a i j }
+   let v = a[i] in
+    a[i] <- a[j];
+    a[j] <- v
+
+  let bubble_sort (a: array int)
+    requires{ true }
+    ensures { sorted a } =
+    let ref i = length a in
+    while i > 1 do
+    invariant { sorted_sub a i (length a - 1) }
+    invariant { forall k1 k2: int. 0 <= k1 < i <= k2 < length a -> a[k1] <= a[k2] }
+    invariant {i <= length a}
+      for j = 1 to i-1 do
+        invariant { sorted_sub a i (length a - 1) }
+        invariant { j < (length a) }
+        invariant { forall k1 k2: int. 0 <= k1 < j < i <= k2 < length a -> a[k1] <= a[j] <= a[k2] }
+        if a[j-1] > a[j] then 
+            swap a (j-1) j
+      done;
+      i <- i-1
+    done;
+end

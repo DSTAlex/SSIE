@@ -1,0 +1,32 @@
+module BinarySearch
+
+  use import int.Int
+  use import int.ComputerDivision
+  use import ref.Ref
+  use import array.Array
+  use import option.Option
+  
+  predicate isin (a : array int) (v : int) = exists i:int. 0 <= i < length a /\ a[i] = v
+
+  let binary_search (a : array int) (v : int)
+    requires { length a > 0 /\ forall i1 i2: int. 0 <= i1 <= i2 < a.length -> a[i1] < a[i2] }
+    ensures  { if (isin a v) then exists i:int. result = Some i /\ a[i] = v /\  0 <= i < length a else result = None }
+    =
+    let ref l = 0 in
+    let ref u = (length a - 1) in
+    while l <= u do
+        variant { u - l }
+        invariant { 0 <= l <= length a }
+        invariant { -1 <= u < length a } 
+        invariant { 0 <= l + div (u - l) 2 < length a }
+        invariant { if (isin a v) then if a[l + div (u - l) 2] > v /\ a[l + div (u - l) 2] < v then a[l + div (u - l) 2] = v else true else true }
+        let m = l + div (u - l) 2 in
+        if a[m] < v then
+            l := m + 1
+        else if a[m] > v then
+            u := m - 1
+        else
+            return Some m
+    done;
+      None
+    end

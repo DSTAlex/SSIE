@@ -1,0 +1,20 @@
+module Multiplication
+
+  use int.Int
+  use int.ComputerDivision
+
+  let multiplication (a b: int) : (_r: int)
+    requires { b >= 0 }
+    ensures  { a * b = _r }
+  = let ref x = a in
+    let ref y = b in
+    let ref z = 0 in
+    while y <> 0 do
+      variant { y }
+      invariant { a * b = x * y + z && y >= 0}
+      if mod y 2 = 1 then z <- z + x;
+      x <- 2 * x;
+      y <- div y 2
+    done;
+    z
+end

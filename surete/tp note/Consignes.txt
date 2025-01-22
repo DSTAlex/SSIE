@@ -1,0 +1,48 @@
+Partie 1 : Widening
+
+Pour rappel, le widening est une op�ration permettant de forcer 
+la terminaison du calcul de l'invariant de boucle.
+
+Pour cela, une possibilit� est par exemple de changer une borne inf � -inf
+si celle ci a diminu� pendant la boucle et une borne sup � +inf si elle a augment�.
+Ainsi widening([a,b],[c,d]) = 
+	[a,b] si [c,d] est inclu dans [a,b]
+	[-inf,b] si c < a mais b >= d
+	[a,+inf] si d > b mais a <= c
+	[-inf,+inf] sinon
+
+Question 1 : Compl�tez les m�thodes de la classe InfiniteWidener dans le fichier Widener.py
+de mani�re � impl�menter le widening ci-dessus sur le domaine des intervalles
+
+Malheureusement, ce widener fait beaucoup perdre en pr�cision l'approximation de l'exemple donn�
+dans Main.py
+Une solution plus pr�cise est de construire un widening qui ne passe les bornes � l'infini
+qu'une fois certaines bornes inf/sup d�pass�es c'est-�-dire widening([a,b],[c,d]) = 
+	...
+	[-inf,b] si c < a ET c < Bound mais b >= d
+	...
+
+Ainsi si les bornes d�finies sont [0,10] on a widening([10,10],[9,11]) = [9,+inf] car la 
+borne est d�pass�e � gauche mais pas � doite
+
+Question 2 : Compl�tez les m�thodes de la classe BoundedWidener de mani�re � impl�menter le
+widening ci-dessus sur le domaine des intervalles
+
+Partie 2 : Loop Unrolling
+
+Afin de palier � l'impr�cision du widening, on souhaite ajouter l'option de d�rouler n fois la boucle sans widening (comme lors du TP2) avant d'appliquer le widening.
+
+Question 3 : Dans Visiteur.py, modifiez VisiteurNonRel.visitWhile afin de d�rouler la boucle self.ulevel fois sans widening avant d'appliquer le widening.
+
+Partie 2 : Trace separation
+
+Afin de gagner en pr�cision on souhaite s�parer en plusieurs �tats diff�rents chemin d'ex�cutions. Ici, on souhaite s�parer compl�tement les branchements conditionnels.
+Ainsi, if x<1 the x=x-1 else x = x+1 fera passer le domaine {x: (0,2)} � deux domaines en fonction de la branche chosisie : {x: (-1,-1)} et {x: (2,3)}.
+Pour cela, le fichier SLevel.py contient une classe VisiteurSLevel qui contient elle-m�me une liste de visiteurs, chacun correspondant � un �tat du domaine.
+
+Question 4 : Compl�tez la fonction VisiteurSLevel.visitIfThenElse afin qu'� partir de la liste de Visiteurs de VisiteurSLevel, on obtienne une liste (de taille doubl�e) de visiteurs contenant tous les domaines possibles apr�s les branchements conditionnels effectu�s.
+
+Afin de traiter les boucles while, if faut traiter individuellement l'effet de la boucle sur chacun des domaines possibles. VisiteurSLevel.visitWhile applique donc � chacun des visiteurs de VisiteurLevel une autre fonction VisiteurSLevel.visitWhileForOneState qui va permettre de traiter chaque domaine de mani�re ind�pendante.
+
+Question 5 : Compl�tez la fonction VisiteurSLevel.visitWhileForOneState qui � partir d'un visiteur particulier va appliquer le While pour transformer le domaine. Attention m�me si ici en entr�e et en sortie on obtient un visiteur unique, la boucle while peut elle-m�me contenir des branchements conditionnels qu'il faudra potentiellement s�parer puis refusionner avec la fonction VisiteurSLevel.fusion.
+
