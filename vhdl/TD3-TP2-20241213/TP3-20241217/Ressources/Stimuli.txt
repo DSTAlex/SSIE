@@ -1,0 +1,4 @@
+MicroWave HeatSetting: W500 Duration : 300
+Grill     HeatSetting: TMS5 Duration : 500
+Defrost   HeatSetting: W750 Duration : 200
+Cooker    HeatSetting: W250 Duration : 100
