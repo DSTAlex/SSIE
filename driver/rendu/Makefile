@@ -2,7 +2,8 @@ KDIR= /lib/modules/$(shell uname -r)/build
 #KDIR= <target-linux-src-path>
 PWD := $(shell pwd)
 
-obj-m := pcifacto.o
+obj-m += pcifacto.o
+
 
 all:
 	$(MAKE) -C $(KDIR) M=$(PWD)

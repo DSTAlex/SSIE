@@ -1,3 +1,4 @@
+
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/init.h> /* module_{init,exit}() */
@@ -10,57 +11,105 @@
 #include <linux/fs.h>
 #include <linux/vmalloc.h>
 
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("Factoriel character driver module");
-MODULE_AUTHOR("Alexandre DI SANTO	 <alexandre.di-santo@epita.fr>");
-
-/*
- * Supported devices VENDOR_ID/DEVICE_ID
- */
-
-// lspci 0000:00:04:0   testdriver
-// lspci -n 0000:00:04:0 1b36:0005
 #define VENDOR_ID 0x1234
 #define DEVICE_ID 0x11e8
 
 #define DEVICE_NAME "edu-fact"
 #define CLASS_NAME "training"
 
+#define BUFFER_SIZE 32
+
 static struct class *training_class = NULL;
 struct cdev cdev;
 static dev_t dev_num;
 
-static struct pci_device_id pcitest_id_table[] = {
+struct pcifacto {
+	struct pci_dev *dev;
+	void __iomem *base0;
+};
+
+struct pcifacto *pdev;
+
+MODULE_LICENSE("GPL");
+MODULE_DESCRIPTION("Factoriel character driver module");
+MODULE_AUTHOR("Alexandre DI SANTO	 <alexandre.di-santo@epita.fr>");
+
+
+
+
+static struct pci_device_id pcifacto_id_table[] = {
 	{ VENDOR_ID, DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 },
 	{ 0, } /* 0 terminated list */
 };
-MODULE_DEVICE_TABLE(pci, pcitest_id_table);
+MODULE_DEVICE_TABLE(pci, pcifacto_id_table);
 
-static ssize_t cfake_read(struct file *filp, char __user *buf, size_t count,
+struct eduv7_priv {
+    u8 __iomem *mem;
+};
+
+static ssize_t facto_read(struct file *filp, char __user *buf, size_t count,
 			  loff_t *f_pos)
 {
 	pr_info("Dummy device read\n");
+	unsigned int data;
+	char n_str[BUFFER_SIZE];
 
-	return 0;
+	size_t real = min_t(loff_t, BUFFER_SIZE - *f_pos, count);
+
+	data = ioread32(pdev->base0 + 0x08);
+	size_t len = snprintf(n_str, sizeof(n_str), "%i\n", data);
+
+	if (len > count) {
+        pr_err("pcifacto: buffer to small\n");
+        return -EINVAL;
+    }
+
+	if (real)
+	{
+		if (copy_to_user(buf, n_str + *f_pos, real))
+		{
+			pr_err("pcifacto: read error\n");
+			return -EFAULT;
+		}
+	}
+
+	*f_pos += real;
+	return real;
 }
 
-static ssize_t cfake_write(struct file *filp, const char __user *buf,
+static ssize_t facto_write(struct file *filp, const char __user *buf,
 			   size_t count, loff_t *f_pos)
 {
 	pr_info("Dummy device write\n");
+	char n_str[BUFFER_SIZE];
+
+	size_t real = min_t(loff_t, BUFFER_SIZE - *f_pos, count);
+
+	if (!real)
+	{
+		pr_err("pcifacto: error in write\n");
+		return -ENOMEM;
+	}
+
+	if (copy_from_user(n_str, buf, count)) {
+		pr_err("pcifacto: write failed in copy\n");
+		return -EFAULT;
+	}
+
+	unsigned int truc = simple_strtoul(n_str, NULL, 10);
+	iowrite32(truc, pdev->base0  + 0x08);
 
 	return count;
 }
 
 /* Functions declaration */
-
 struct file_operations cfake_fops = {
 	.owner = THIS_MODULE,
-	.read = cfake_read,
-	.write = cfake_write,
+	.read = facto_read,
+	.write = facto_write,
 };
 
-static int init_char_device()
+static int init_char_device(void)
 {
     int err = 0;
 	int minor = 0;
@@ -99,7 +148,7 @@ static int init_char_device()
 	/* Create device node */
 	device = device_create(training_class, NULL, /* no parent device */
 			       dev_num, NULL, /* no additional data */
-			       DEVICE_NAME "%d", minor);
+			       DEVICE_NAME "%d", 0);
 	if (IS_ERR(device)) {
 		err = PTR_ERR(device);
 		pr_warn("Error %d while trying to create %s%d", err,
@@ -121,50 +170,121 @@ err_chrdev:
 /*
  * PCI handling
  */
-static int pcitest_probe(struct pci_dev *dev, const struct pci_device_id *ent)
+static int pcifacto_probe(struct pci_dev *dev, const struct pci_device_id *ent)
 {
+	int err = 0;
+
 	dev_info(&(dev->dev), "pcifacto: found %x:%x\n", ent->vendor,
 		 ent->device);
 
-	int err = init_char_device();
 
+	dev_info(&(dev->dev), "etape 1\n");
+	/* Alloc private data */
+	pdev = kzalloc(sizeof(struct pcifacto), GFP_KERNEL);
+	if (!pdev) {
+		dev_warn(&dev->dev, "pcitest: unable to alloc memory\n");
+		return -ENOMEM;
+	}
+
+	/* set private data */
+	pdev->dev = dev;
+	pci_set_drvdata(dev, pdev);
+
+	dev_info(&(dev->dev), "etape 2\n");
+	/* enable device */
+	err = pci_enable_device(dev);
+	if (err) {
+		dev_warn(&dev->dev, "pcitest: unable to enable device\n");
+		goto err_alloc;
+	}
+
+	dev_info(&(dev->dev), "etape 3\n");
+
+	/* request regions */
+	err = pci_request_regions(dev, DEVICE_NAME);
+
+
+	dev_info(&(dev->dev), "etape 3.5\n");
+
+	if (err) {
+		dev_warn(&dev->dev, "pcitest: unable to request regions\n");
+		goto err_enable;
+	}
+
+	dev_info(&(dev->dev),"etape 4\n");
+	/* map BAR 0 */
+	pdev->base0 = pci_iomap(dev, 0, pci_resource_len(dev, 0));
+	if (!pdev->base0) {
+		dev_warn(&dev->dev, "pcitest: unable to map BAR0\n");
+		err = -EIO;
+		goto err_regions;
+	}
+
+	return 0;
+
+err_regions:
+	pci_release_regions(dev);
+err_enable:
+	pci_disable_device(dev);
+err_alloc:
+	kfree(pdev);
 	return err;
 
 }
 
-static void pcitest_remove(struct pci_dev *dev)
+static void pcifacto_remove(struct pci_dev *dev)
 {
-	dev_info(&(dev->dev), "pcitest: device removed\n");
+
+	//struct pcitest *pdev = pci_get_drvdata(dev);
+
+	dev_info(&(dev->dev), "pcifacto: device removed\n");
+
+	pci_iounmap (dev, pdev->base0);
+	pci_release_regions(dev);
+	pci_disable_device(dev);
+	kfree(pdev);
 }
 
-static struct pci_driver pcitest_driver = {
+static struct pci_driver pcifacto_driver = {
 	.name = "pcifacto",
-	.id_table = pcitest_id_table,
-	.probe = pcitest_probe, /* Init one device */
-	.remove = pcitest_remove, /* Remove one device */
+	.id_table = pcifacto_id_table,
+	.probe = pcifacto_probe, /* Init one device */
+	.remove = pcifacto_remove, /* Remove one device */
 };
 
 /*
  * Init and Exit
  */
-static int __init pcitest_init(void)
+static int __init pcifacto_init(void)
 {
 	int ret;
 
 	/* Register PCI driver */
-	ret = pci_register_driver(&pcitest_driver);
+	ret = pci_register_driver(&pcifacto_driver);
 	if (ret < 0) {
-		pr_warn("pcitest: unable to register PCI driver\n");
+		pr_warn("pcifacto: unable to register PCI driver\n");
+		return ret;
+	}
+
+	ret = init_char_device();
+	if (ret < 0) {
+		pr_warn("pcifacto: unable to create device\n");
 		return ret;
 	}
 
 	return 0;
 }
 
-static void __exit pcitest_exit(void)
+static void __exit pcifacto_exit(void)
 {
-	pci_unregister_driver(&pcitest_driver);
+
+	pci_unregister_driver(&pcifacto_driver);
+
+	device_destroy(training_class, dev_num);
+	cdev_del(&cdev);
+	class_destroy(training_class);
+	unregister_chrdev_region(dev_num, 1);
 }
 
-module_init(pcitest_init);
-module_exit(pcitest_exit);
+module_init(pcifacto_init);
+module_exit(pcifacto_exit);
