@@ -50,7 +50,7 @@ struct eduv7_priv {
 static ssize_t facto_read(struct file *filp, char __user *buf, size_t count,
 			  loff_t *f_pos)
 {
-	pr_info("Dummy device read\n");
+	pr_info("Read for facto\n");
 	unsigned int data;
 	char n_str[BUFFER_SIZE];
 
@@ -80,7 +80,7 @@ static ssize_t facto_read(struct file *filp, char __user *buf, size_t count,
 static ssize_t facto_write(struct file *filp, const char __user *buf,
 			   size_t count, loff_t *f_pos)
 {
-	pr_info("Dummy device write\n");
+	pr_info("Write for facto\n");
 	char n_str[BUFFER_SIZE];
 
 	size_t real = min_t(loff_t, BUFFER_SIZE - *f_pos, count);
@@ -177,12 +177,10 @@ static int pcifacto_probe(struct pci_dev *dev, const struct pci_device_id *ent)
 	dev_info(&(dev->dev), "pcifacto: found %x:%x\n", ent->vendor,
 		 ent->device);
 
-
-	dev_info(&(dev->dev), "etape 1\n");
 	/* Alloc private data */
 	pdev = kzalloc(sizeof(struct pcifacto), GFP_KERNEL);
 	if (!pdev) {
-		dev_warn(&dev->dev, "pcitest: unable to alloc memory\n");
+		dev_warn(&dev->dev, "pcifacto: unable to alloc memory\n");
 		return -ENOMEM;
 	}
 
@@ -190,32 +188,27 @@ static int pcifacto_probe(struct pci_dev *dev, const struct pci_device_id *ent)
 	pdev->dev = dev;
 	pci_set_drvdata(dev, pdev);
 
-	dev_info(&(dev->dev), "etape 2\n");
 	/* enable device */
 	err = pci_enable_device(dev);
 	if (err) {
-		dev_warn(&dev->dev, "pcitest: unable to enable device\n");
+		dev_warn(&dev->dev, "pcifacto: unable to enable device\n");
 		goto err_alloc;
 	}
 
-	dev_info(&(dev->dev), "etape 3\n");
 
 	/* request regions */
 	err = pci_request_regions(dev, DEVICE_NAME);
 
 
-	dev_info(&(dev->dev), "etape 3.5\n");
-
 	if (err) {
-		dev_warn(&dev->dev, "pcitest: unable to request regions\n");
+		dev_warn(&dev->dev, "pcifacto: unable to request regions\n");
 		goto err_enable;
 	}
 
-	dev_info(&(dev->dev),"etape 4\n");
 	/* map BAR 0 */
 	pdev->base0 = pci_iomap(dev, 0, pci_resource_len(dev, 0));
 	if (!pdev->base0) {
-		dev_warn(&dev->dev, "pcitest: unable to map BAR0\n");
+		dev_warn(&dev->dev, "pcifacto: unable to map BAR0\n");
 		err = -EIO;
 		goto err_regions;
 	}
